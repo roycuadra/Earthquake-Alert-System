@@ -4,22 +4,22 @@
 
 #define BUZZER_PIN 14       // D5 = GPIO14
 #define LED_PIN 2           // D4 = GPIO2 (onboard LED, active LOW)
-#define THRESHOLD 500       // Higher = less sensitive (filter small bumps)
+#define THRESHOLD 500       // Higher = less sensitive
 #define SAMPLE_COUNT 100    // Baseline calibration samples
 #define STABLE_COUNT 10     // Quake ends after 10 stable readings
 #define ALERT_DURATION 4000 // Total alert duration (ms)
 #define PULSE_INTERVAL 40   // Pulse on/off interval (ms)
-#define CONFIRM_COUNT 5     // Require consecutive strong shakes
-#define FILTER_SIZE 10      // Moving average filter size
-#define NOISE_FLOOR 50      // Ignore raw vibrations below this
+#define CONFIRM_COUNT 8     // Require consecutive strong shakes
+#define FILTER_SIZE 15      // Moving average filter size
+#define NOISE_FLOOR 80      // Ignore tiny raw vibrations
 #define RETRY_INTERVAL 5000 // Retry reconnect every 5s
-#define COOLDOWN_TIME 2000  // Time after alert where detection is ignored
+#define COOLDOWN_TIME 3000  // Cooldown after alert
 #define RESET_TIMEOUT 60000 // 60s no valid data = auto reset
 #define DAILY_RESET 86400000UL // 24h auto reset (ms)
 
 MPU6050 mpu;
 
-// Baseline values
+// Baseline
 long ax0, ay0, az0;
 
 // Moving average buffer
@@ -50,7 +50,7 @@ bool sensorOK = false;
 // Last alert end time
 unsigned long lastAlertEnd = 0;
 
-// Last retry time
+// Retry timer
 unsigned long lastRetry = 0;
 
 // Failsafe: last good read
@@ -59,20 +59,20 @@ unsigned long lastGoodRead = 0;
 // Daily reset reference
 unsigned long bootTime = 0;
 
-
+// ---------- Setup ----------
 void setup() {
   Serial.begin(115200);
   Wire.begin();
 
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH); 
+  digitalWrite(LED_PIN, HIGH); // LED off
 
   Serial.println("Initializing MPU6050...");
   mpu.initialize();
 
   if (!mpu.testConnection()) {
-    Serial.println("MPU6050 connection failed! System in safe mode (no buzzer).");
+    Serial.println("MPU6050 connection failed! Safe mode.");
     sensorOK = false;
     lastGoodRead = millis();
     bootTime = millis();
@@ -82,8 +82,7 @@ void setup() {
   Serial.println("MPU6050 connected");
   sensorOK = true;
 
-
-  Serial.println("Calibrating... Keep device still");
+  // Calibration
   long axSum = 0, aySum = 0, azSum = 0;
   for (int i = 0; i < SAMPLE_COUNT; i++) {
     int16_t ax, ay, az, gx, gy, gz;
@@ -114,7 +113,7 @@ void setup() {
   bootTime = millis();
 }
 
-
+// ---------- Loop ----------
 void loop() {
   if (!sensorOK) {
     if (millis() - lastRetry > RETRY_INTERVAL) {
@@ -133,14 +132,13 @@ void loop() {
 
   int16_t ax, ay, az, gx, gy, gz;
   if (!mpu.testConnection()) {
-    Serial.println("Lost connection to MPU6050! Stopping buzzer.");
+    Serial.println("Lost connection! Stopping buzzer.");
     noTone(BUZZER_PIN);
     digitalWrite(LED_PIN, HIGH);
     sensorOK = false;
     return;
   }
   mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
-
   lastGoodRead = millis();
 
   long dx = ax - ax0;
@@ -150,6 +148,7 @@ void loop() {
 
   if (rawVibration < NOISE_FLOOR) rawVibration = 0;
 
+  // Moving average filter
   filterSum -= filterBuffer[filterIndex];
   filterBuffer[filterIndex] = rawVibration;
   filterSum += rawVibration;
@@ -159,17 +158,12 @@ void loop() {
   Serial.print(millis() / 1000.0, 2);
   Serial.print("s | Vibration=");
   Serial.print(vibration);
-  int barLength = map(vibration, 0, 2000, 0, 50); 
-  Serial.print(" | ");
-  for (int i = 0; i < barLength; i++) Serial.print("-");
   if (alerting) Serial.print(" ALERT");
   Serial.println();
 
-  if (!alerting && millis() - lastAlertEnd < COOLDOWN_TIME) {
-    delay(50);
-    return;
-  }
+  if (!alerting && millis() - lastAlertEnd < COOLDOWN_TIME) return;
 
+  // Detection logic
   if (vibration > THRESHOLD) {
     triggerCount++;
     if (triggerCount >= CONFIRM_COUNT && !alerting) {
@@ -183,9 +177,10 @@ void loop() {
       Serial.println("*** EARTHQUAKE DETECTED ***");
     }
   } else {
-    triggerCount = 0;
+    if (triggerCount > 0) triggerCount--; // decay slowly instead of reset
   }
 
+  // Alert handling
   if (alerting) {
     if (millis() - lastPulse >= PULSE_INTERVAL) {
       lastPulse = millis();
@@ -198,7 +193,7 @@ void loop() {
       digitalWrite(LED_PIN, HIGH);
       alerting = false;
       lastAlertEnd = millis();
-      Serial.println("Alert finished, entering cooldown");
+      Serial.println("Alert finished, cooldown...");
     }
   }
 
@@ -212,16 +207,15 @@ void loop() {
     }
   }
 
-  // AUTO-RESET FAILSAFE
+  // Failsafes
   if (millis() - lastGoodRead > RESET_TIMEOUT) {
-    Serial.println("No valid data too long! Restarting...");
+    Serial.println("No valid data, restarting...");
     delay(500);
     ESP.restart();
   }
 
-  // DAILY AUTO-RESET
   if (millis() - bootTime > DAILY_RESET) {
-    Serial.println("Daily scheduled reset...");
+    Serial.println("Daily reset...");
     delay(500);
     ESP.restart();
   }
