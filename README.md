@@ -46,7 +46,7 @@ Watch the live demo here:
 **Solar-Powered Version:**
 - **Optional solar-powered version** for backup during power outages    
 
-![Solar Schematic](./img/schematic.png)
+![Solar Schematic](./img/Schematic.png)
 
 Notes:  
 - The onboard LED is tied to **GPIO2 (D4)** on most ESP8266 boards.  
