@@ -4,14 +4,14 @@
 
 #define BUZZER_PIN 14       // D5 = GPIO14
 #define LED_PIN 2           // D4 = GPIO2 (onboard LED, active LOW)
-#define THRESHOLD 300       // Higher = less sensitive
-#define CONFIRM_COUNT 5     // Require consecutive strong shakes
+#define THRESHOLD 200       // Higher = less sensitive
+#define CONFIRM_COUNT 2     // Require consecutive strong shakes
+#define FILTER_SIZE 7       // Moving average filter size
 #define SAMPLE_COUNT 100    // Baseline calibration samples
 #define STABLE_COUNT 10     // Quake ends after 10 stable readings
 #define ALERT_DURATION 4000 // Total alert duration (ms)
 #define PULSE_INTERVAL 40   // Pulse on/off interval (ms)
-#define FILTER_SIZE 15      // Moving average filter size
-#define NOISE_FLOOR 80      // Ignore tiny raw vibrations
+#define NOISE_FLOOR 30      // Ignore tiny raw vibrations
 #define RETRY_INTERVAL 5000 // Retry reconnect every 5s
 #define COOLDOWN_TIME 1000  // Cooldown after alert
 #define RESET_TIMEOUT 60000 // 60s no valid data = auto reset
