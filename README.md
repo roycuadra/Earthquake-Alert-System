@@ -5,10 +5,10 @@ The system continuously monitors vibrations, filters noise, and activates both a
 
 ---
 
-## 🎥 Video Demonstration
+## Video Demonstration
 
 Watch the live demo here:  
-[👉 Video Demonstration](https://vt.tiktok.com/ZSUXM96RY/)  
+[ Video Demonstration](https://vt.tiktok.com/ZSUXM96RY/)  
 
 ---
 
@@ -48,20 +48,49 @@ Watch the live demo here:
 
 ![Solar Schematic](./img/Schematic.png)
 
-Notes:  
-- The onboard LED is tied to **GPIO2 (D4)** on most ESP8266 boards.  
-- Use a **passive buzzer** (not active).  
-- The MPU6050 requires a clean and stable **3.3 V supply**.  
+---
+
+## Setup & Instructions
+
+### 1. Install Arduino IDE
+- Download and install the latest [Arduino IDE](https://www.arduino.cc/en/software).
+
+### 2. Add ESP8266 Board Package
+1. Open Arduino IDE  
+2. Go to **File → Preferences**  
+3. In **Additional Board Manager URLs**, add:
+> http://arduino.esp8266.com/stable/package_esp8266com_index.json  
+4. Go to **Tools → Board → Board Manager**, search for **ESP8266**, and install.
+
+### 3. Install Required Libraries
+In Arduino IDE, go to **Sketch → Include Library → Manage Libraries...** and install:
+- **Wire** (usually pre-installed)  
+- **MPU6050** by Electronic Cats / Jeff Rowberg (I²Cdevlib)  
+
+### 4. Select Your Board & Port
+- Go to **Tools → Board**, select your ESP8266 (e.g., NodeMCU 1.0 / Wemos D1 Mini).  
+- Select the correct **COM Port** under **Tools → Port**.  
+
+### 5. Upload the Code
+1. Open the provided `.ino` code file in Arduino IDE.  
+2. Click the **Upload** button (right arrow icon).  
+3. Wait until the code compiles and uploads successfully.  
+
+### 6. Test the System
+- Once uploaded, open the **Serial Monitor** at **115200 baud**.  
+- The system will calibrate automatically, then start monitoring vibrations.  
+- Shake the sensor slightly to trigger the buzzer + LED.  
 
 ---
 
-## 📜 License
+## License
 
 This project is licensed under the **MIT License**.  
 See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👤 Author
+## Author
 
-Created with passion by **Roy Cuadra**  
+Created with passion ❤ by **Roy Cuadra** 
+Date: 10/18/2025 
