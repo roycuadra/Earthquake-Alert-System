@@ -18,7 +18,7 @@ This project is a **DIY Earthquake Alert System** created for learning, experime
 
 Use this project as a hands-on learning tool to explore sensors, IoT, and electronics, not as a substitute for real-world disaster prevention systems.
 
-The creator is not responsible for damage, injury, or loss that may result from the use of this project.
+The author is not responsible for any damage, injury, or loss caused by using this project. Always handle electronics safely.
 
 ---
 
