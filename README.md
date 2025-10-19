@@ -12,6 +12,14 @@ Watch the live demo here:
 
 ---
 
+## Disclaimer 
+
+This project is a **DIY Earthquake Alert System** created for learning, experimentation, and hobby use. It is not a certified earthquake detection or early warning system and should not be relied upon for safety-critical applications. Professional, industrial, and government systems are far more advanced and undergo rigorous testing.
+
+Use this project as a hands-on learning tool to explore sensors, IoT, and electronics, not as a substitute for real-world disaster prevention systems.
+
+---
+
 ## Hardware Requirements
 
 - ESP8266 development board NodeMCU ESP12E  
