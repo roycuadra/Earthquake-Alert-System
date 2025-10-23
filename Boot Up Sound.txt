@@ -1,0 +1,97 @@
+// --- Power-on 2-tone blink sequence ---
+
+// Beep 1: low tone
+digitalWrite(LED_PIN, LED_ON);
+tone(BUZZER_PIN, 1200);  // low beep
+delay(150);
+digitalWrite(LED_PIN, LED_OFF);
+noTone(BUZZER_PIN);
+delay(120);
+
+// Beep 2: higher tone
+digitalWrite(LED_PIN, LED_ON);
+tone(BUZZER_PIN, 2000);  // higher beep
+delay(180);
+digitalWrite(LED_PIN, LED_OFF);
+noTone(BUZZER_PIN);
+delay(150);
+
+// ---------------------------------------
+
+
+
+// --- Power-on startup chime (pleasant 3-tone sequence) ---
+digitalWrite(LED_PIN, LED_ON);
+tone(BUZZER_PIN, 1200, 120);  // soft low tone
+delay(150);
+tone(BUZZER_PIN, 1600, 120);  // mid tone
+delay(150);
+tone(BUZZER_PIN, 2100, 200);  // higher tone, longer
+delay(250);
+digitalWrite(LED_PIN, LED_OFF);
+noTone(BUZZER_PIN);
+// ----------------------------------------------------------
+
+
+// --- Power-on Futuristic Startup Sound (Smooth Glissando Up) ---
+digitalWrite(LED_PIN, LED_ON);
+
+for (int freq = 800; freq <= 2200; freq += 40) {  // smooth pitch rise
+  tone(BUZZER_PIN, freq);
+  delay(20);  // controls glide speed
+}
+noTone(BUZZER_PIN);
+
+digitalWrite(LED_PIN, LED_OFF);
+delay(80);
+
+tone(BUZZER_PIN, 2400, 120);  // short final "confirmation" beep
+digitalWrite(LED_PIN, LED_ON);
+delay(150);
+digitalWrite(LED_PIN, LED_OFF);
+noTone(BUZZER_PIN);
+// ---------------------------------------------------------------
+
+
+
+// --- Power-on Tech Startup Tone (Clean & Quick) ---
+digitalWrite(LED_PIN, LED_ON);
+tone(BUZZER_PIN, 1500, 100);  // mid tone
+delay(120);
+tone(BUZZER_PIN, 2000, 100);  // higher tone
+delay(120);
+tone(BUZZER_PIN, 2500, 150);  // confirmation tone
+delay(180);
+noTone(BUZZER_PIN);
+
+digitalWrite(LED_PIN, LED_OFF);
+delay(100);
+
+digitalWrite(LED_PIN, LED_ON);
+tone(BUZZER_PIN, 1800, 80);   // short status ping
+delay(100);
+digitalWrite(LED_PIN, LED_OFF);
+noTone(BUZZER_PIN);
+// ---------------------------------------------------
+
+
+
+
+// --- DJI-Style Drone Startup Chime (Smooth & Premium) ---
+digitalWrite(LED_PIN, LED_ON);
+
+// Smooth ascending melody (C → E → G → High C)
+tone(BUZZER_PIN, 1046, 120);  // C6
+delay(130);
+tone(BUZZER_PIN, 1318, 120);  // E6
+delay(130);
+tone(BUZZER_PIN, 1568, 150);  // G6
+delay(160);
+
+// Gentle descending confirmation tone (E6)
+tone(BUZZER_PIN, 1318, 200);
+delay(220);
+
+digitalWrite(LED_PIN, LED_OFF);
+noTone(BUZZER_PIN);
+// --------------------------------------------------------

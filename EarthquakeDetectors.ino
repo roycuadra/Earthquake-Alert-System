@@ -1,22 +1,31 @@
+/*
+  ----------------------------------
+  DIY Earthquake Alert System
+  Created by Roy Cuadra 2025
+  ----------------------------------
+*/
 #include <Wire.h>
 #include <MPU6050.h>
 #include <math.h>
 
-#define BUZZER_PIN 14          // D5 = GPIO14
-#define LED_PIN 2              // D4 = GPIO2 (onboard LED, active LOW)
-#define THRESHOLD 450          // Higher = less sensitive
-#define CONFIRM_COUNT 2        // Require consecutive strong shakes
-#define FILTER_SIZE 15         // Moving average filter size
-#define SAMPLE_COUNT 100       // Baseline calibration samples
-#define STABLE_COUNT 10        // Quake ends after 10 stable readings
-#define ALERT_DURATION 4000    // Total alert duration (ms)
-#define PULSE_INTERVAL 40      // Pulse on/off interval (ms)
-#define NOISE_FLOOR 60         // Ignore tiny raw vibrations
-#define RETRY_INTERVAL 5000    // Retry reconnect every 5s
-#define COOLDOWN_TIME 1000     // Cooldown after alert
-#define RESET_TIMEOUT 60000    // 60s no valid data = auto reset
-#define DAILY_RESET 86400000UL // 24h auto reset (ms)
-#define MIN_DURATION 1200      // *** Anti-knock: vibration must last 1.2s ***
+#define BUZZER_PIN 14          // D5 = GPIO14                         //
+#define LED_PIN 2              // D4 = GPIO2                          //
+#define THRESHOLD 450          // Higher = less sensitive             //
+#define CONFIRM_COUNT 2        // Require consecutive strong shakes   //
+#define FILTER_SIZE 15         // Moving average filter size          //
+#define SAMPLE_COUNT 100       // Baseline calibration samples        //
+#define STABLE_COUNT 10        // Quake ends after 10 stable readings //
+#define ALERT_DURATION 4000    // Total alert duration (ms)           //
+#define PULSE_INTERVAL 40      // Pulse on/off interval (ms)          //
+#define NOISE_FLOOR 60         // Ignore tiny raw vibrations          //
+#define RETRY_INTERVAL 5000    // Retry reconnect every 5s            //
+#define COOLDOWN_TIME 1000     // Cooldown after alert                //
+#define RESET_TIMEOUT 60000    // 60s no valid data = auto reset      //
+#define DAILY_RESET 86400000UL // 24h auto reset (ms)                 //
+#define MIN_DURATION 1200      // Anti-knock Features                 //
+
+#define LED_ON  HIGH
+#define LED_OFF LOW
 
 MPU6050 mpu;
 
@@ -43,17 +52,35 @@ unsigned long lastRetry = 0;
 unsigned long lastGoodRead = 0;
 unsigned long bootTime = 0;
 
-// Anti-knock timers
 unsigned long knockStart = 0;
 bool possibleQuake = false;
 
 void setup() {
   Serial.begin(115200);
   Wire.begin();
-
+ 
   pinMode(BUZZER_PIN, OUTPUT);
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
+  digitalWrite(LED_PIN, LED_OFF); 
+  noTone(BUZZER_PIN);
+
+  // ------------- DJI-Style Drone Startup Sound ------------
+  digitalWrite(LED_PIN, LED_ON);
+  
+  tone(BUZZER_PIN, 1046, 120);  
+  delay(130);
+  tone(BUZZER_PIN, 1318, 120);  
+  delay(130);
+  tone(BUZZER_PIN, 1568, 150);
+  delay(160);
+  
+  tone(BUZZER_PIN, 1318, 200);
+  delay(220);
+  
+  digitalWrite(LED_PIN, LED_OFF);
+  noTone(BUZZER_PIN);
+  // --------------------------------------------------------
+
 
   Serial.println("Initializing MPU6050...");
   mpu.initialize();
@@ -105,7 +132,7 @@ void loop() {
   int16_t ax, ay, az, gx, gy, gz;
   if (!mpu.testConnection()) {
     noTone(BUZZER_PIN);
-    digitalWrite(LED_PIN, HIGH);
+    digitalWrite(LED_PIN, LED_OFF);
     sensorOK = false;
     return;
   }
@@ -124,13 +151,11 @@ void loop() {
 
   if (!alerting && millis() - lastAlertEnd < COOLDOWN_TIME) return;
 
-  // -------- Anti-knock detection --------
   if (vibration > THRESHOLD) {
     if (!possibleQuake) {
       possibleQuake = true;
-      knockStart = millis();  // start timer
+      knockStart = millis();
     }
-    // if vibration lasts longer than MIN_DURATION, confirm quake
     if (millis() - knockStart >= MIN_DURATION) {
       triggerCount++;
       if (triggerCount >= CONFIRM_COUNT && !alerting) {
@@ -140,33 +165,39 @@ void loop() {
         alertStart = millis();
         lastPulse = millis();
         buzzerOn = false;
-        digitalWrite(LED_PIN, LOW);
         Serial.println("*** EARTHQUAKE DETECTED ***");
       }
     }
   } else {
-    possibleQuake = false;  // reset if it was only a knock
+    possibleQuake = false;
     triggerCount = 0;
   }
 
-  // -------- Alert handling --------
+  // ----------------- Alert handling -----------------------
   if (alerting) {
     if (millis() - lastPulse >= PULSE_INTERVAL) {
       lastPulse = millis();
       buzzerOn = !buzzerOn;
-      if (buzzerOn) tone(BUZZER_PIN, 2000);
-      else noTone(BUZZER_PIN);
+
+      if (buzzerOn) {
+        tone(BUZZER_PIN, 2000);
+        digitalWrite(LED_PIN, LED_ON);   
+      } else {
+        noTone(BUZZER_PIN);
+        digitalWrite(LED_PIN, LED_OFF); 
+      }
     }
+
     if (millis() - alertStart >= ALERT_DURATION) {
       noTone(BUZZER_PIN);
-      digitalWrite(LED_PIN, HIGH);
+      digitalWrite(LED_PIN, LED_OFF);
       alerting = false;
       lastAlertEnd = millis();
       Serial.println("Alert finished, cooldown...");
     }
   }
+  // --------------------------------------------------------
 
-  // Quake ends
   if (vibration <= THRESHOLD) {
     if (quakeActive) {
       stableCounter++;
