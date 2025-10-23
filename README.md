@@ -30,8 +30,6 @@ The author is not responsible for any damage, injury, or loss caused by using th
 - Jumper wires
 - breadboard 
 
-> *(Optional)* 18650 battery + TP4056 charging module + 5V solar panel  
-
 ---
 
 ## Pinout & Wiring
@@ -48,16 +46,9 @@ The author is not responsible for any damage, injury, or loss caused by using th
 
 ---
 
-## Schematic Diagrams
+## Circuit Diagrams
 
-**Basic Setup:**  
-
-![Schematic Diagram](./img/Schematic_simple.png)
-
-**Solar-Powered Version:**
-- **Optional solar-powered version** for backup during power outages    
-
-![Solar Schematic](./img/Schematic.png)
+![Circuit Diagram](./img/Schematic_simple.png)
 
 ---
 
