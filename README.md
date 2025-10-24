@@ -32,6 +32,10 @@ The author is not responsible for any damage, injury, or loss caused by using th
 
 ---
 
+## Circuit Diagrams
+
+![Circuit Diagram](./img/Schematic_simple.png)
+
 ## Pinout & Wiring
 
 | NodeMCU Pin | Function / Signal | Destination           |
@@ -43,12 +47,6 @@ The author is not responsible for any damage, injury, or loss caused by using th
 | D5 (GPIO14) | Buzzer +         | Passive Buzzer (+)    |
 | GND         | Buzzer −         | Passive Buzzer (−)    |
 | D4 (GPIO2)  | Onboard LED      | LED indicator  |
-
----
-
-## Circuit Diagrams
-
-![Circuit Diagram](./img/Schematic_simple.png)
 
 ---
 
@@ -87,5 +85,10 @@ In Arduino IDE, go to **Sketch → Include Library → Manage Libraries...** and
 
 ## Author
 
-Created with passion ❤ by **Roy Cuadra** 
-Date: 10/18/2025 
+- Created with passion ❤ by **Roy Cuadra** 
+- Updated Date: 10-18-2025
+
+---
+
+**Thank you for checking out this project!** 
+You are welcome to **fork**, **improve**, or **use** it for learning purposes.
