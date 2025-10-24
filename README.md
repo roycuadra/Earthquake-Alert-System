@@ -32,7 +32,7 @@ The author is not responsible for any damage, injury, or loss caused by using th
 
 ---
 
-## Circuit Diagrams
+## Circuit Diagram
 
 ![Circuit Diagram](./img/Schematic_simple.png)
 
