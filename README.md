@@ -54,6 +54,26 @@ The author is not responsible for any damage, injury, or loss caused by using th
 
 ![Circuit Diagram](./img/solar.png)
 
+# HW-085 Voltage Setting Guide
+
+The **HW-085 Boost Converter Module** allows you to adjust the output voltage using solder pads labeled **A** and **B** on the front side of the PCB.
+
+Use a soldering iron to bridge (connect) or remove (disconnect) the pads set it to 5V
+
+---
+
+## Voltage Setting Table
+
+| A | B | Output Voltage |
+|:-:|:-:|:--------------:|
+| 0 | 0 |     5V         |
+| 0 | 1 |     8V         |
+| 1 | 0 |     9V         |
+| 1 | 1 |    12V         |
+
+> **Note:**  
+> - `0` = Pad **disconnected**  
+> - `1` = Pad **connected**
 
 ---
 
