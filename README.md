@@ -109,6 +109,27 @@ In Arduino IDE, go to **Sketch → Include Library → Manage Libraries...** and
 - Shake the sensor slightly to trigger the buzzer + LED.  
 
 ---
+## Configuration Settings
+
+You can adjust these parameters based on your desired behavior for the system (e.g., sensitivity, alert duration, or stability).
+
+```cpp
+#define BUZZER_PIN 14          // D5 = GPIO14
+#define LED_PIN 2              // D4 = GPIO2
+#define THRESHOLD 450          // Higher = less sensitive
+#define CONFIRM_COUNT 2        // Require consecutive strong shakes
+#define FILTER_SIZE 15         // Moving average filter size
+#define SAMPLE_COUNT 100       // Baseline calibration samples
+#define STABLE_COUNT 10        // Quake ends after 10 stable readings
+#define ALERT_DURATION 4000    // Total alert duration (ms)
+#define PULSE_INTERVAL 40      // Pulse on/off interval (ms)
+#define NOISE_FLOOR 60         // Ignore tiny raw vibrations
+#define RETRY_INTERVAL 5000    // Retry reconnect every 5s
+#define COOLDOWN_TIME 1000     // Cooldown after alert (ms)
+#define RESET_TIMEOUT 60000    // 60s no valid data = auto reset
+#define DAILY_RESET 86400000UL // 24h auto reset (ms)
+#define MIN_DURATION 1200      // Anti-knock feature
+```
 
 ## Author
 
