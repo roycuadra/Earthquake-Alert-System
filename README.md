@@ -34,7 +34,7 @@ The author is not responsible for any damage, injury, or loss caused by using th
 
 ## Circuit Diagrams
 
-- Basic Setup:
+## Basic Setup:
 
 ![Circuit Diagram](./img/Schematic_simple.png)
 
@@ -50,19 +50,19 @@ The author is not responsible for any damage, injury, or loss caused by using th
 | GND         | Buzzer −         | Passive Buzzer (−)    |
 | D4 (GPIO2)  | Onboard LED      | LED indicator         |
 
-- Solar Powered Setup:
+## Solar Powered Setup:
 
 ![Circuit Diagram](./img/solar.png)
 
-# HW-085 Voltage Setting Guide
+### HW-085 Voltage Setting Guide
 
-The **HW-085 Boost Converter Module** allows you to adjust the output voltage using solder pads labeled **A** and **B** on the front side of the PCB.
+- The **HW-085 Boost Converter Module** allows you to adjust the output voltage using solder pads labeled **A** and **B** on the front side of the PCB.
 
-Use a soldering iron to bridge (connect) or remove (disconnect) the pads set it to 5V
+- Use a soldering iron to bridge (connect) or remove (disconnect) the pads set it to 5V
 
 ---
 
-## Voltage Setting Table
+### Voltage Setting Table
 
 | A | B | Output Voltage |
 |:-:|:-:|:--------------:|
