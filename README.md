@@ -34,9 +34,11 @@ The author is not responsible for any damage, injury, or loss caused by using th
 
 ## Circuit Diagrams
 
+- Basic Setup:
+
 ![Circuit Diagram](./img/Schematic_simple.png)
 
-## Pinout & Wiring
+## MCU to Sensor Wiring
 
 | NodeMCU Pin | Function / Signal | Destination           |
 |-------------|------------------|-----------------------|
@@ -46,7 +48,12 @@ The author is not responsible for any damage, injury, or loss caused by using th
 | D2 (GPIO4)  | I²C SDA          | MPU6050 SDA           |
 | D5 (GPIO14) | Buzzer +         | Passive Buzzer (+)    |
 | GND         | Buzzer −         | Passive Buzzer (−)    |
-| D4 (GPIO2)  | Onboard LED      | LED indicator  |
+| D4 (GPIO2)  | Onboard LED      | LED indicator         |
+
+- Solar Powered Setup:
+
+![Circuit Diagram](./img/solar.png)
+
 
 ---
 
